@@ -1,7 +1,0 @@
-services:
-  teamheart:
-    container_name: teamheart-staging
-    environment:
-      APP_ENV: staging
-      SPRING_PROFILES_ACTIVE: staging
-      LOGGING_FILE_NAME: /app/logs/teamheart-staging.log
