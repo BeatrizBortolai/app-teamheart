@@ -30,7 +30,7 @@ teamheart/
 ### Passos
 1. Copie o arquivo de exemplo de variaveis de ambiente:
    ```bash
-   cp .env .env
+   cp .env.example .env.example
    ```
 
 2. Edite o arquivo `.env` e preencha com suas credenciais reais do Oracle.

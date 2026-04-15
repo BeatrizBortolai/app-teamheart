@@ -34,7 +34,7 @@ build/
 .vscode/
 
 ### Secrets / local env ###
-.env
+.env.example
 
 # Project exclude paths
 /target/
