@@ -1,0 +1,42 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Dar permissão ao mvnw
+        run: chmod +x mvnw
+
+      - name: Build e Testes
+        run: ./mvnw clean verify
+
+  deploy-staging:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy no Render (staging)
+        run: curl -X POST "${{ secrets.RENDER_STAGING_DEPLOY_HOOK }}"
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy no Render (production)
+        run: curl -X POST "${{ secrets.RENDER_PRODUCTION_DEPLOY_HOOK }}"

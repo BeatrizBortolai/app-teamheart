@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: teamheart-staging
+    runtime: docker
+    repo: https://github.com/BeatrizBortolai/teamheart-app
+    plan: free
+    branch: master
+    dockerfilePath: ./Dockerfile
+    autoDeploy: false
+    healthCheckPath: /swagger-ui/index.html
+    envVars:
+      - key: SERVER_PORT
+        value: 8080
+      - key: APP_ENV
+        value: staging
+      - key: SPRING_PROFILES_ACTIVE
+        value: staging
+      - key: SPRING_JPA_SHOW_SQL
+        value: true
+      - key: LOGGING_FILE_NAME
+        value: /app/logs/teamheart-staging.log
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+
+  - type: web
+    name: teamheart-production
+    runtime: docker
+    repo: https://github.com/BeatrizBortolai/teamheart-app
+    plan: free
+    branch: master
+    dockerfilePath: ./Dockerfile
+    autoDeploy: false
+    healthCheckPath: /swagger-ui/index.html
+    envVars:
+      - key: SERVER_PORT
+        value: 8080
+      - key: APP_ENV
+        value: production
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SPRING_JPA_SHOW_SQL
+        value: false
+      - key: LOGGING_FILE_NAME
+        value: /app/logs/teamheart-production.log
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false

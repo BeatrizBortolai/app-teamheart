@@ -1,0 +1,7 @@
+services:
+  teamheart:
+    container_name: teamheart-production
+    environment:
+      APP_ENV: production
+      SPRING_PROFILES_ACTIVE: production
+      LOGGING_FILE_NAME: /app/logs/teamheart-production.log
