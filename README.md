@@ -26,9 +26,11 @@ teamheart/
 1. Copie o arquivo `.env.example` para `.env`:
 ```bash
 cp .env.example .env
+```
 
 ### Arquivo de variáveis de ambiente
-![.env.example](docs/evidencias/env-example.PNG)
+
+![env example](docs/evidencias/env-example.PNG)
 
 2. Suba a aplicação:
    ```bash
