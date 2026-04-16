@@ -1,12 +1,12 @@
 # Projeto - Cidades ESG Inteligentes | TeamHeart
 
-Aplicacao Spring Boot desenvolvida no contexto ESG, com foco em autenticação de usuários, gestão de feedbacks internos, cadastro de funcionários e fluxo de recrutamento e seleção com priorização de diversidade.
+Aplicação Spring Boot desenvolvida no contexto ESG, com foco em autenticação de usuários, gestão de feedbacks internos, cadastro de funcionários e fluxo de recrutamento e seleção com priorização de diversidade.
 
 ## Estrutura do projeto
 
 ```text
 teamheart/
-├── .github/workflows/ci.yml
+├── .github/workflows/maven.yml
 ├── Dockerfile
 ├── docker-compose.yml
 ├── .env.example
@@ -17,26 +17,33 @@ teamheart/
 
 ## Como executar localmente com Docker
 
-### Pre-requisitos
+### Pré-requisitos
 - Docker instalado
 - Docker Compose instalado
 - Acesso ao banco Oracle utilizado pela disciplina
 
 ### Passos
-1. Selecione o arquivo `.env.example`
+1. Copie o arquivo `.env.example` para `.env`:
+```bash
+cp .env.example .env
 
-2. Edite o arquivo `.env.example` para `.env` já com as credenciais reais do Oracle.
+### Arquivo de variáveis de ambiente
+![.env.example](docs/evidencias/env-example.PNG)
 
-3. Suba a aplicacao:
+2. Suba a aplicacao:
    ```bash
    docker compose up --build
    ```
 
-4. A aplicacao ficara disponivel em:
+![Docker](docs/evidencias/docker-compose-up.PNG)
+
+3. A aplicacao ficara disponivel em:
    - API: `http://localhost:8080`
    - Swagger: `http://localhost:8080/swagger-ui/index.html`
 
-### Observacoes importantes
+![Swagger](docs/evidencias/swagger-localhost.PNG)
+
+### Observações importantes
 - O projeto utiliza banco Oracle externo da disciplina, por isso o `docker-compose.yml` orquestra a aplicação e a configuração do ambiente, sem subir um banco local.
 - Os logs da aplicacao sao persistidos em volume Docker nomeado: `teamheart-logs`.
 - A rede do serviço é criada explicitamente como `teamheart-network`.
@@ -55,31 +62,37 @@ A automação foi implementada com **GitHub Actions**.
 
 1. **Build e testes**
    - Checkout do repositório
-   - Configuracao do Java 21
+   - Configuração do Java 21
    - Cache do Maven
-   - Execucao de `./mvnw -B clean verify`
+   - Execução de `./mvnw -B clean verify`
    - Geração do artefato `.jar`
 
+![Build e testes](docs/evidencias/github-actions-build-test.PNG)
+
 2. **Deploy em staging**
-   - Validacao da composicao do ambiente com `docker compose config`
+   - Validação da composição do ambiente com `docker compose config`
    - Disparo do **Deploy Hook** do Render para o serviço `teamheart-staging`
    - Publicação automática do ambiente de staging no Render
 
+![Deploy staging](docs/evidencias/github-actions-staging.PNG)
+
 3. **Deploy em produção**
-   - Validacao da composição do ambiente com `docker compose config`
+   - Validação da composição do ambiente com `docker compose config`
    - Disparo do **Deploy Hook** do Render para o serviço `teamheart-production`
    - Publicação automática do ambiente de produção no Render
 
+![Deploy production](docs/evidencias/github-actions-production.PNG)
+
 ### Funcionamento do pipeline
-O workflow foi separado em tres jobs:
+O workflow foi separado em três jobs:
 - um job de integração continua (`build-and-test`)
 - um job de deploy real para **staging** via Render Deploy Hook
 - um job de deploy real para **production** via Render Deploy Hook
 
-Cada ambiente possui configuração própria no Render e arquivo de override para reforçar a separação entre `staging` e `production`.
-
 ### Arquivo de pipeline
-- `.github/workflows/ci.yml`
+- `.github/workflows/maven.yml`
+
+  ![Pipeline completo](docs/evidencias/pipeline.PNG)
 
 ## Deploy real no Render
 
@@ -87,30 +100,57 @@ Este projeto foi preparado para **deploy real** no Render com dois ambientes:
 - `teamheart-staging`
 - `teamheart-production`
 
+### Ambiente staging no Render
+
+![Render staging](docs/evidencias/render-staging.PNG)
+
+### Swagger staging
+
+![Swagger staging](docs/evidencias/swagger-staging.PNG)
+
+### Ambiente produção no Render
+
+![Render production](docs/evidencias/render-production.PNG)
+
+### Swagger produção
+
+![Swagger production](docs/evidencias/swagger-production.PNG)
+
 ### Arquivos adicionados
 - `render.yaml`: define os dois serviços web no Render
-- `.github/workflows/ci.yml`: dispara os deploy hooks de staging e produção
+- `.github/workflows/maven.yml`: dispara os deploy hooks de staging e produção
 
-### Secrets necessarios no GitHub
-No repositório do GitHub, configure os seguintes secrets:
+### Configuração do deploy (GitHub e Render)
+
+O deploy automatizado foi configurado utilizando integração entre GitHub Actions e Render.
+
+No GitHub, foram utilizados secrets para armazenar os deploy hooks de cada ambiente:
 - `RENDER_STAGING_DEPLOY_HOOK`
 - `RENDER_PRODUCTION_DEPLOY_HOOK`
 
-### Variaveis necessarias no Render
-Em cada serviço do Render, configure:
+Esses hooks são responsáveis por acionar o deploy automático no Render durante a execução do pipeline.
+
+No Render, cada ambiente possui variáveis de ambiente próprias, incluindo:
 - `SPRING_DATASOURCE_URL`
 - `SPRING_DATASOURCE_USERNAME`
 - `SPRING_DATASOURCE_PASSWORD`
-- `SERVER_PORT=8080`
+- `SERVER_PORT`
 
-### Observacao importante
-O Render nao utiliza `docker-compose.yml` para publicacao de servicos. Para esse caso, o equivalente recomendado e usar **Render Blueprints** com `render.yaml`. A documentacao oficial informa que o Render oferece deploy a partir de Dockerfile, suporte a Blueprint com `render.yaml` e uso de variaveis de ambiente para staging e production. citeturn262183search1turn262183search2turn262183search0turn262183search23
+### Observação importante
+
+O Render não utiliza `docker-compose.yml` diretamente para publicação dos serviços.  
+Para o deploy, foi utilizado o arquivo `render.yaml`, que define os serviços da aplicação utilizando o conceito de **Blueprints**.
+
+A aplicação é construída a partir do `Dockerfile` e configurada por meio de variáveis de ambiente no próprio painel do Render, permitindo a separação entre os ambientes de **staging** e **produção**.
 
 ## Containerizacao
+### Containers em execução
+
+![Docker Desktop](docs/evidencias/docker-desktop.PNG)
 
 ### Estrategia do Dockerfile
 O projeto utiliza **multi-stage build**:
-- **Stage 1:** compila e empacota a aplicacao com Maven
+- **Stage 1:** compila e empacota a aplicação com Maven
 - **Stage 2:** executa apenas o `.jar` final em imagem Java 21 mais enxuta
 
 ### Dockerfile utilizado
@@ -130,23 +170,18 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
+![Dockerfile](docs/evidencias/dockerfile.PNG)
+
+### Docker Compose
+![docker-compose.yml](docs/evidencias/docker-compose-yml.PNG)
+
 ### Estrategias adotadas
 - Multi-stage build para reduzir a imagem final
-- Externalizacao de segredos via `.env`
-- Porta configurada por variavel de ambiente
+- Externalização de segredos via `.env`
+- Porta configurada por variável de ambiente
 - Volume nomeado para logs
 - Rede Docker explicita
-- Separacao dos ambientes `staging` e `production` com arquivos compose override
-
-## Prints do funcionamento
-
-Sugestao de capturas para anexar antes do upload final na plataforma, caso deseje complementar ainda mais:
-- terminal com `docker compose up --build`
-
-- Swagger em execucao
-- workflow do GitHub Actions com os 3 jobs concluidos
-- job de staging
-- job de production
+- Separação dos ambientes `staging` e `production` via Render e variáveis de ambiente
 
 ## Tecnologias utilizadas
 
@@ -166,18 +201,8 @@ Sugestao de capturas para anexar antes do upload final na plataforma, caso desej
 - JUnit 5
 - Mockito
 
-## Melhorias realizadas nesta versao
 
-- Correcao da instrucao de criacao do `.env`
-- Sanitizacao do `.env.example` com placeholders
-- Inclusao de arquivos especificos para `staging` e `production`
-- Ajuste do workflow para usar `mvnw`
-- Reforco da separacao dos ambientes no pipeline
-- Inclusao da documentacao tecnica em PDF
-- Atualizacao do checklist da entrega
-- Padronizacao da estrutura final do projeto
-
-## Checklist de Entrega (obrigatorio)
+## Checklist de Entrega
 
 | Item | OK |
 |---|---|
@@ -189,5 +214,3 @@ Sugestao de capturas para anexar antes do upload final na plataforma, caso desej
 | Documentacao tecnica com evidencias (PDF ou PPT) | ☒ |
 | Deploy realizado nos ambientes staging e producao | ☒ |
 
-## Observacao final
-Agora o projeto esta preparado para **deploy real** no Render em dois ambientes separados. Para concluir a publicacao, basta criar os dois servicos no Render, preencher o `render.yaml` com o link do seu repositorio e cadastrar os deploy hooks como secrets no GitHub. Depois disso, cada push na branch `master` executa build, testes e dispara os deploys de `staging` e `production`.
