@@ -1,7 +1,0 @@
-Esta pasta pode ser usada para adicionar capturas de tela antes da entrega final.
-Sugestoes:
-- swagger.png
-- docker-compose-up.png
-- github-actions-build-test.png
-- github-actions-staging.png
-- github-actions-production.png

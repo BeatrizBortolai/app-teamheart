@@ -1,6 +1,6 @@
 # Projeto - Cidades ESG Inteligentes | TeamHeart
 
-Aplicacao Spring Boot desenvolvida no contexto ESG, com foco em autenticacao de usuarios, gestao de feedbacks internos, cadastro de funcionarios e fluxo de recrutamento e selecao com priorizacao de diversidade.
+Aplicacao Spring Boot desenvolvida no contexto ESG, com foco em autenticação de usuários, gestão de feedbacks internos, cadastro de funcionários e fluxo de recrutamento e seleção com priorização de diversidade.
 
 ## Estrutura do projeto
 
@@ -9,14 +9,9 @@ teamheart/
 ├── .github/workflows/ci.yml
 ├── Dockerfile
 ├── docker-compose.yml
-├── docker-compose.staging.yml
-├── docker-compose.production.yml
 ├── .env.example
-├── .env.staging.example
-├── .env.production.example
 ├── README.md
 ├── render.yaml
-├── Documentacao_Tecnica_TeamHeart.pdf
 └── src/
 ```
 
@@ -28,12 +23,9 @@ teamheart/
 - Acesso ao banco Oracle utilizado pela disciplina
 
 ### Passos
-1. Copie o arquivo de exemplo de variaveis de ambiente:
-   ```bash
-   cp .env.example .env.example
-   ```
+1. Selecione o arquivo `.env.example`
 
-2. Edite o arquivo `.env` e preencha com suas credenciais reais do Oracle.
+2. Edite o arquivo `.env.example` para `.env` já com as credenciais reais do Oracle.
 
 3. Suba a aplicacao:
    ```bash
@@ -45,46 +37,46 @@ teamheart/
    - Swagger: `http://localhost:8080/swagger-ui/index.html`
 
 ### Observacoes importantes
-- O projeto utiliza banco Oracle externo da disciplina, por isso o `docker-compose.yml` orquestra a aplicacao e a configuracao do ambiente, sem subir um banco local.
+- O projeto utiliza banco Oracle externo da disciplina, por isso o `docker-compose.yml` orquestra a aplicação e a configuração do ambiente, sem subir um banco local.
 - Os logs da aplicacao sao persistidos em volume Docker nomeado: `teamheart-logs`.
-- A rede do servico e criada explicitamente como `teamheart-network`.
+- A rede do serviço é criada explicitamente como `teamheart-network`.
 
 ## Pipeline CI/CD
 
-A automacao foi implementada com **GitHub Actions**.
+A automação foi implementada com **GitHub Actions**.
 
 ### Ferramenta utilizada
 - GitHub Actions
 - GitHub Environments: `staging` e `production`
 - Render para hospedagem dos ambientes reais
-- Docker para empacotamento da aplicacao
+- Docker para empacotamento da aplicação
 
 ### Etapas do pipeline
 
 1. **Build e testes**
-   - Checkout do repositorio
+   - Checkout do repositório
    - Configuracao do Java 21
    - Cache do Maven
    - Execucao de `./mvnw -B clean verify`
-   - Geracao do artefato `.jar`
+   - Geração do artefato `.jar`
 
 2. **Deploy em staging**
    - Validacao da composicao do ambiente com `docker compose config`
-   - Disparo do **Deploy Hook** do Render para o servico `teamheart-staging`
-   - Publicacao automatica do ambiente de staging no Render
+   - Disparo do **Deploy Hook** do Render para o serviço `teamheart-staging`
+   - Publicação automática do ambiente de staging no Render
 
-3. **Deploy em producao**
-   - Validacao da composicao do ambiente com `docker compose config`
-   - Disparo do **Deploy Hook** do Render para o servico `teamheart-production`
-   - Publicacao automatica do ambiente de producao no Render
+3. **Deploy em produção**
+   - Validacao da composição do ambiente com `docker compose config`
+   - Disparo do **Deploy Hook** do Render para o serviço `teamheart-production`
+   - Publicação automática do ambiente de produção no Render
 
 ### Funcionamento do pipeline
 O workflow foi separado em tres jobs:
-- um job de integracao continua (`build-and-test`)
+- um job de integração continua (`build-and-test`)
 - um job de deploy real para **staging** via Render Deploy Hook
 - um job de deploy real para **production** via Render Deploy Hook
 
-Cada ambiente possui configuracao propria no Render e arquivo de override para reforcar a separacao entre `staging` e `production`.
+Cada ambiente possui configuração própria no Render e arquivo de override para reforçar a separação entre `staging` e `production`.
 
 ### Arquivo de pipeline
 - `.github/workflows/ci.yml`
@@ -96,16 +88,16 @@ Este projeto foi preparado para **deploy real** no Render com dois ambientes:
 - `teamheart-production`
 
 ### Arquivos adicionados
-- `render.yaml`: define os dois servicos web no Render
-- `.github/workflows/ci.yml`: dispara os deploy hooks de staging e producao
+- `render.yaml`: define os dois serviços web no Render
+- `.github/workflows/ci.yml`: dispara os deploy hooks de staging e produção
 
 ### Secrets necessarios no GitHub
-No repositorio do GitHub, configure os seguintes secrets:
+No repositório do GitHub, configure os seguintes secrets:
 - `RENDER_STAGING_DEPLOY_HOOK`
 - `RENDER_PRODUCTION_DEPLOY_HOOK`
 
 ### Variaveis necessarias no Render
-Em cada servico do Render, configure:
+Em cada serviço do Render, configure:
 - `SPRING_DATASOURCE_URL`
 - `SPRING_DATASOURCE_USERNAME`
 - `SPRING_DATASOURCE_PASSWORD`
@@ -148,11 +140,9 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ## Prints do funcionamento
 
-Para facilitar a entrega, este pacote ja inclui a documentacao tecnica em PDF:
-- `Documentacao_Tecnica_TeamHeart.pdf`
-
 Sugestao de capturas para anexar antes do upload final na plataforma, caso deseje complementar ainda mais:
 - terminal com `docker compose up --build`
+
 - Swagger em execucao
 - workflow do GitHub Actions com os 3 jobs concluidos
 - job de staging
