@@ -30,14 +30,14 @@ cp .env.example .env
 ### Arquivo de variáveis de ambiente
 ![.env.example](docs/evidencias/env-example.PNG)
 
-2. Suba a aplicacao:
+2. Suba a aplicação:
    ```bash
    docker compose up --build
    ```
 
 ![Docker](docs/evidencias/docker-compose-up.PNG)
 
-3. A aplicacao ficara disponivel em:
+3. A aplicação ficará disponível em:
    - API: `http://localhost:8080`
    - Swagger: `http://localhost:8080/swagger-ui/index.html`
 
@@ -45,7 +45,7 @@ cp .env.example .env
 
 ### Observações importantes
 - O projeto utiliza banco Oracle externo da disciplina, por isso o `docker-compose.yml` orquestra a aplicação e a configuração do ambiente, sem subir um banco local.
-- Os logs da aplicacao sao persistidos em volume Docker nomeado: `teamheart-logs`.
+- Os logs da aplicação são persistidos em volume Docker nomeado: `teamheart-logs`.
 - A rede do serviço é criada explicitamente como `teamheart-network`.
 
 ## Pipeline CI/CD
@@ -204,13 +204,13 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ## Checklist de Entrega
 
-| Item | OK |
-|---|---|
+| Item                                                | OK |
+|-----------------------------------------------------|---|
 | Projeto compactado em .ZIP com estrutura organizada | ☒ |
-| Dockerfile funcional | ☒ |
-| docker-compose.yml ou arquivos Kubernetes | ☒ |
-| Pipeline com etapas de build, teste e deploy | ☒ |
-| README.md com instrucoes e prints | ☒ |
-| Documentacao tecnica com evidencias (PDF ou PPT) | ☒ |
-| Deploy realizado nos ambientes staging e producao | ☒ |
+| Dockerfile funcional                                | ☒ |
+| docker-compose.yml ou arquivos Kubernetes           | ☒ |
+| Pipeline com etapas de build, teste e deploy        | ☒ |
+| README.md com instruções e prints                   | ☒ |
+| Documentação técnica com evidências (PDF ou PPT)    | ☒ |
+| Deploy realizado nos ambientes staging e produção   | ☒ |
 
