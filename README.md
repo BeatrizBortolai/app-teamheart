@@ -91,10 +91,19 @@ O workflow foi separado em três jobs:
 - um job de deploy real para **staging** via Render Deploy Hook
 - um job de deploy real para **production** via Render Deploy Hook
 
-### Arquivo de pipeline
-- `.github/workflows/maven.yml`
+### Execução completa do pipeline
 
-  ![Pipeline completo](docs/evidencias/pipeline.PNG)
+A imagem abaixo apresenta a execução completa do pipeline CI/CD no GitHub Actions, evidenciando o fluxo automatizado entre as etapas.
+
+![Execucao Pipeline](docs/evidencias/execucao-pipeline.PNG)
+
+---
+
+### Configuração do pipeline
+
+O pipeline foi definido no arquivo `.github/workflows/maven.yml`, onde são especificadas as etapas de build, testes e deploy.
+
+![Pipeline](docs/evidencias/pipeline.PNG)
 
 ## Deploy real no Render
 
