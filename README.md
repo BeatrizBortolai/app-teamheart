@@ -1,4 +1,4 @@
-# Projeto - Cidades ESG Inteligentes | TeamHeart
+# Projeto - TeamHeart
 
 Aplicação Spring Boot desenvolvida no contexto ESG, com foco em autenticação de usuários, gestão de feedbacks internos, cadastro de funcionários e fluxo de recrutamento e seleção com priorização de diversidade.
 
