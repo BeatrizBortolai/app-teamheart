@@ -86,6 +86,14 @@ A automação foi implementada com **GitHub Actions**.
 ![Deploy production](docs/evidencias/github-actions-production.PNG)
 
 ### Funcionamento do pipeline
+
+O pipeline é acionado automaticamente a cada push na branch principal.
+
+O fluxo de execução ocorre da seguinte forma:
+- Inicialmente é realizado o build e a execução dos testes automatizados com Maven
+- Em seguida, o deploy é feito automaticamente no ambiente de staging
+- Por fim, o pipeline realiza o deploy no ambiente de produção
+
 O workflow foi separado em três jobs:
 - um job de integração continua (`build`)
 - um job de deploy real para **staging** via Render Deploy Hook
