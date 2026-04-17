@@ -200,6 +200,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 - Docker
 - Docker Compose
 - GitHub Actions
+- Render
 - JUnit 5
 - Mockito
 
