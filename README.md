@@ -95,7 +95,7 @@ O fluxo de execução ocorre da seguinte forma:
 - Por fim, o pipeline realiza o deploy no ambiente de produção
 
 O workflow foi separado em três jobs:
-- um job de integração continua (`build`)
+- um job de integração contínua (`build`)
 - um job de deploy real para **staging** via Render Deploy Hook
 - um job de deploy real para **production** via Render Deploy Hook
 
