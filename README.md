@@ -60,30 +60,26 @@ A automação foi implementada com **GitHub Actions**.
 
 ### Ferramenta utilizada
 - GitHub Actions
-- GitHub Environments: `staging` e `production`
 - Render para hospedagem dos ambientes reais
 - Docker para empacotamento da aplicação
 
 ### Etapas do pipeline
 
-1. **Build e testes**
+1. **Build**
    - Checkout do repositório
    - Configuração do Java 21
-   - Cache do Maven
    - Execução de `./mvnw -B clean verify`
    - Geração do artefato `.jar`
 
 ![Build e testes](docs/evidencias/github-actions-build-test.PNG)
 
 2. **Deploy em staging**
-   - Validação da composição do ambiente com `docker compose config`
    - Disparo do **Deploy Hook** do Render para o serviço `teamheart-staging`
    - Publicação automática do ambiente de staging no Render
 
 ![Deploy staging](docs/evidencias/github-actions-staging.PNG)
 
 3. **Deploy em produção**
-   - Validação da composição do ambiente com `docker compose config`
    - Disparo do **Deploy Hook** do Render para o serviço `teamheart-production`
    - Publicação automática do ambiente de produção no Render
 
@@ -91,7 +87,7 @@ A automação foi implementada com **GitHub Actions**.
 
 ### Funcionamento do pipeline
 O workflow foi separado em três jobs:
-- um job de integração continua (`build-and-test`)
+- um job de integração continua (`build`)
 - um job de deploy real para **staging** via Render Deploy Hook
 - um job de deploy real para **production** via Render Deploy Hook
 
@@ -149,7 +145,7 @@ Para o deploy, foi utilizado o arquivo `render.yaml`, que define os serviços da
 
 A aplicação é construída a partir do `Dockerfile` e configurada por meio de variáveis de ambiente no próprio painel do Render, permitindo a separação entre os ambientes de **staging** e **produção**.
 
-## Containerizacao
+## Containerização
 ### Containers em execução
 
 ![Docker Desktop](docs/evidencias/docker-desktop.PNG)
@@ -184,7 +180,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ### Estrategias adotadas
 - Multi-stage build para reduzir a imagem final
 - Externalização de segredos via `.env`
-- Porta configurada por variável de ambiente
+- Aplicação exposta localmente na porta 8080
 - Volume nomeado para logs
 - Rede Docker explicita
 - Separação dos ambientes `staging` e `production` via Render e variáveis de ambiente
