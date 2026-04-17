@@ -18,8 +18,8 @@ teamheart/
 ## Como executar localmente com Docker
 
 ### Pré-requisitos
-- Docker instalado
-- Docker Compose instalado
+- Docker Desktop instalado (inclui Docker e Docker Compose)
+- Docker Desktop em execução
 - Acesso ao banco Oracle utilizado pela disciplina
 
 ### Passos
@@ -31,6 +31,10 @@ cp .env.example .env
 ### Arquivo de variáveis de ambiente
 
 ![env example](docs/evidencias/env-example.PNG)
+
+O projeto utiliza variáveis de ambiente para configuração da conexão com o banco Oracle.
+Para fins acadêmicos e para facilitar a execução do projeto pelo avaliador, o arquivo .env.example foi disponibilizado já preenchido com os valores necessários para execução no ambiente da disciplina.
+Em um cenário real de produção, essas credenciais não deveriam ser versionadas no repositório.
 
 2. Suba a aplicação:
    ```bash
