@@ -221,6 +221,57 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 - JUnit 5
 - Mockito
 
+# Configuração e Execução dos Testes
+
+## Pré-requisitos
+
+Antes de executar os testes, é necessário possuir instalado:
+
+- Java 17 ou superior
+- Maven
+- Node.js
+- Newman
+- Docker
+
+---
+
+# Configuração do Projeto
+## 1. Clonar o repositório
+
+```bash
+git clone <URL_DO_REPOSITORIO>
+
+## 2. Acessar a pasta do projeto
+cd app-teamheart
+
+## 3. Instalar dependências
+mvn clean install
+
+# Executando a Aplicação
+## Subir aplicação Spring Boot
+mvn spring-boot:run
+
+# Executando os Testes de API
+## Instalar Newman
+npm install -g newman
+
+## Executar coleção Postman
+newman run collections/TeamHeart.postman_collection.json
+
+# Executando Testes com Docker
+## Build da imagem
+docker build -t teamheart-tests .
+
+## Executar container
+docker run teamheart-tests
+
+## Estrutura dos Testes
+collections/    -> Collections Postman
+schemas/        -> JSON Schemas
+environments/   -> Variáveis de ambiente
+reports/        -> Relatórios de execução
+Dockerfile      -> Configuração Docker
+README.md       -> Documentação
 
 ## Checklist de Entrega
 
