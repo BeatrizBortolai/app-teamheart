@@ -318,52 +318,11 @@ docker run teamheart-tests
   - Validação de status code 400
   - Validação de mensagem de erro
 
-### Funcionalidade 2: Cadastro de Usuários
-- **Arquivo:** `src/test/resources/features/registro-usuario.feature`
-- **Cenários:**
-  - ✅ Registrar novo usuário com sucesso - Cria novo usuário
-  - Validação de status code 201
-  - ✅ Rejeitar email duplicado - Previne duplicação de emails
-  - Validação de status code 409
-  - Testes de compliance ESG (privacidade de dados)
-
 ### Funcionalidade 3: Gerenciamento de Candidatos
 - **Arquivo:** `src/test/resources/features/cadastro-candidato.feature`
 - **Cenários:**
-  - ✅ Cadastrar candidato com sucesso - Inclui dados de diversidade
-  - Validação de status code 201
-  - Validação de contrato JSON Schema (candidato-schema.json)
-  - Captura de informações de etnia e gênero para análise ESG
   - ✅ Buscar candidato inexistente - Teste negativo
   - Validação de status code 404
-
-- **Arquivo:** `src/test/resources/features/busca-candidato.feature`
-- **Cenários:**
-  - ✅ Busca de candidato inexistente
-  - Validação de tratamento de erros
-  - Validação de status code 404
-
-### Funcionalidade 4: Gestão de Vagas e Seleções
-- **Arquivo:** `src/test/resources/features/gestao-vagas-selecoes.feature`
-- **Cenários:**
-  - ✅ Listar vagas disponíveis
-  - Validação de status code 200
-  - Validação de contrato JSON Schema (vaga-schema.json)
-  - ✅ Criar processo de seleção
-  - Validação de status code 201
-  - Rastreabilidade para governança ESG
-
-### Funcionalidade 5: Gestão de Diversidade e Feedbacks
-- **Arquivo:** `src/test/resources/features/gestao-diversidade-feedbacks.feature`
-- **Cenários:**
-  - ✅ Listar funcionários cadastrados
-  - Validação de status code 200
-  - Validação de contrato JSON Schema (funcionario-schema.json)
-  - ✅ Registrar feedback de funcionário
-  - Validação de status code 201
-  - Validação de contrato JSON Schema (feedback-schema.json)
-  - Compliance com pilares ESG (inclusão e diversidade)
-
 ---
 
 ## Estrutura dos Testes
@@ -390,18 +349,11 @@ src/test/
     │   ├── login.feature
     │   ├── login-invalido.feature
     │   ├── busca-candidato.feature
-    │   ├── cadastro-candidato.feature
-    │   ├── registro-usuario.feature
-    │   ├── gestao-vagas-selecoes.feature
-    │   └── gestao-diversidade-feedbacks.feature
+    │  
     └── schemas/
         ├── login-success-schema.json
         ├── error-schema.json
-        ├── candidato-schema.json
-        ├── vaga-schema.json
-        ├── selecao-schema.json
-        ├── funcionario-schema.json
-        └── feedback-schema.json
+   
 ```
 
 ---
@@ -410,25 +362,14 @@ src/test/
 
 ### 1. Status Code Validation ✅
 - HTTP 200 (OK)
-- HTTP 201 (Created)
 - HTTP 400 (Bad Request)
 - HTTP 404 (Not Found)
-- HTTP 409 (Conflict)
 
-### 2. Body Response Validation ✅
-- Validação de campos obrigatórios
-- Validação de tipos de dados
-- Validação de mensagens de erro
 
-### 3. JSON Schema Contract Testing ✅
+### 2. JSON Schema Contract Testing ✅
 Todos os endpoints retornam respostas validadas contra JSON Schemas:
 - `login-success-schema.json` - Resposta de login bem-sucedido
 - `error-schema.json` - Respostas de erro
-- `candidato-schema.json` - Dados de candidatos
-- `vaga-schema.json` - Dados de vagas
-- `selecao-schema.json` - Dados de seleções
-- `funcionario-schema.json` - Dados de funcionários
-- `feedback-schema.json` - Dados de feedbacks
 
 ---
 
