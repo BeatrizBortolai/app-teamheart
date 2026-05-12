@@ -43,4 +43,17 @@ public class CandidatoService {
         }
         repository.deleteById(id);
     }
+
+    public Candidato buscarPorId(Long id) {
+
+        return repository.findById(id)
+            .orElseThrow(() ->
+                new CandidatoNotFoundException(
+                    "Candidato não encontrado com id: " + id
+                )
+            );
+    }
+
 }
+
+

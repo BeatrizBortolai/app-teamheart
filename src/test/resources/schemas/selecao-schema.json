@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "statusSelecao": {
+      "type": "string"
+    },
+    "dataInicio": {
+      "type": "string"
+    },
+    "dataFim": {
+      "type": "string"
+    },
+    "vagaId": {
+      "type": "integer"
+    }
+  },
+  "required": ["id", "statusSelecao"],
+  "additionalProperties": false
+}
+

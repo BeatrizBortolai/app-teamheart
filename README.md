@@ -220,67 +220,249 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 - Render
 - JUnit 5
 - Mockito
+- **Cucumber** (BDD Framework)
+- **RestAssured** (API Testing)
+- **JSON Schema Validation**
 
-# Configuração e Execução dos Testes
+# Configuração e Execução dos Testes Automatizados (BDD)
 
 ## Pré-requisitos
 
 Antes de executar os testes, é necessário possuir instalado:
 
-- Java 17 ou superior
+- Java 21 ou superior
 - Maven
-- Node.js
-- Newman
-- Docker
+- Docker (para testes em containers)
+- Docker Compose
 
 ---
 
-# Configuração do Projeto
+## Configuração do Projeto
 
-#### 1. Clonar o repositório
+### 1. Clonar o repositório
+```bash
 git clone <URL_DO_REPOSITORIO>
+```
 
-#### 2. Acessar a pasta do projeto
+### 2. Acessar a pasta do projeto
+```bash
 cd app-teamheart
+```
 
-#### 3. Instalar dependências
+### 3. Instalar dependências
+```bash
 mvn clean install
+```
 
-### Executando a Aplicação
-#### Subir aplicação Spring Boot
+---
+
+## Executando a Aplicação
+
+### Subir aplicação Spring Boot localmente
+```bash
 mvn spring-boot:run
+```
 
-### Executando os Testes de API
-#### Instalar Newman
-npm install -g newman
+A aplicação ficará disponível em:
+- API: `http://localhost:8080`
+- Swagger: `http://localhost:8080/swagger-ui/index.html`
 
-#### Executar coleção Postman
-newman run collections/TeamHeart.postman_collection.json
+### Subir com Docker Compose
+```bash
+docker compose up --build
+```
 
-### Executando Testes com Docker
-#### Build da imagem
+---
+
+## Executando os Testes Automatizados (BDD com Cucumber)
+
+### Opção 1: Executar testes localmente com Maven
+
+Execute todos os testes (incluindo BDD, unitários e de integração):
+```bash
+mvn clean test
+```
+
+Execute apenas os testes BDD (Cucumber):
+```bash
+mvn clean test -Dtest=RunCucumberTest
+```
+
+### Opção 2: Executar testes com Docker
+
+Build da imagem com testes:
+```bash
 docker build -t teamheart-tests .
+```
 
-#### Executar container
+Executar container com testes:
+```bash
 docker run teamheart-tests
+```
 
-#### Estrutura dos Testes
-- collections/    -> Collections Postman
-- schemas/        -> JSON Schemas
-- environments/   -> Variáveis de ambiente
-- reports/        -> Relatórios de execução
-- Dockerfile      -> Configuração Docker
-- README.md       -> Documentação
+---
 
-## Checklist de Entrega
+## Cenários de Teste BDD Implementados
 
-| Item                                                | OK |
-|-----------------------------------------------------|---|
-| Projeto compactado em .ZIP com estrutura organizada | ☒ |
-| Dockerfile funcional                                | ☒ |
-| docker-compose.yml ou arquivos Kubernetes           | ☒ |
-| Pipeline com etapas de build, teste e deploy        | ☒ |
-| README.md com instruções e prints                   | ☒ |
-| Documentação técnica com evidências (PDF ou PPT)    | ☒ |
-| Deploy realizado nos ambientes staging e produção   | ☒ |
+### Funcionalidade 1: Autenticação de Usuários
+- **Arquivo:** `src/test/resources/features/login.feature`
+- **Cenários:**
+  - ✅ Login com sucesso - Valida autenticação com credenciais corretas
+  - Validação de status code 200
+  - Validação de contrato JSON Schema
+  - Validação de mensagem de sucesso
+
+- **Arquivo:** `src/test/resources/features/login-invalido.feature`
+- **Cenários:**
+  - ✅ Login inválido - Rejeita credenciais incorretas
+  - Validação de status code 400
+  - Validação de mensagem de erro
+
+### Funcionalidade 2: Cadastro de Usuários
+- **Arquivo:** `src/test/resources/features/registro-usuario.feature`
+- **Cenários:**
+  - ✅ Registrar novo usuário com sucesso - Cria novo usuário
+  - Validação de status code 201
+  - ✅ Rejeitar email duplicado - Previne duplicação de emails
+  - Validação de status code 409
+  - Testes de compliance ESG (privacidade de dados)
+
+### Funcionalidade 3: Gerenciamento de Candidatos
+- **Arquivo:** `src/test/resources/features/cadastro-candidato.feature`
+- **Cenários:**
+  - ✅ Cadastrar candidato com sucesso - Inclui dados de diversidade
+  - Validação de status code 201
+  - Validação de contrato JSON Schema (candidato-schema.json)
+  - Captura de informações de etnia e gênero para análise ESG
+  - ✅ Buscar candidato inexistente - Teste negativo
+  - Validação de status code 404
+
+- **Arquivo:** `src/test/resources/features/busca-candidato.feature`
+- **Cenários:**
+  - ✅ Busca de candidato inexistente
+  - Validação de tratamento de erros
+  - Validação de status code 404
+
+### Funcionalidade 4: Gestão de Vagas e Seleções
+- **Arquivo:** `src/test/resources/features/gestao-vagas-selecoes.feature`
+- **Cenários:**
+  - ✅ Listar vagas disponíveis
+  - Validação de status code 200
+  - Validação de contrato JSON Schema (vaga-schema.json)
+  - ✅ Criar processo de seleção
+  - Validação de status code 201
+  - Rastreabilidade para governança ESG
+
+### Funcionalidade 5: Gestão de Diversidade e Feedbacks
+- **Arquivo:** `src/test/resources/features/gestao-diversidade-feedbacks.feature`
+- **Cenários:**
+  - ✅ Listar funcionários cadastrados
+  - Validação de status code 200
+  - Validação de contrato JSON Schema (funcionario-schema.json)
+  - ✅ Registrar feedback de funcionário
+  - Validação de status code 201
+  - Validação de contrato JSON Schema (feedback-schema.json)
+  - Compliance com pilares ESG (inclusão e diversidade)
+
+---
+
+## Estrutura dos Testes
+
+```text
+src/test/
+├── java/
+│   └── com/teamheart/
+│       ├── steps/
+│       │   ├── ApiSteps.java              # Steps do Cucumber (Given/When/Then)
+│       │   └── CucumberSpringConfiguration.java
+│       ├── api/
+│       │   └── AuthApiTest.java           # Testes de integração de API
+│       ├── login/
+│       │   └── service/
+│       │       └── UsuarioServiceTest.java
+│       ├── recrutamento/
+│       │   └── service/
+│       │       └── SelecaoServiceTest.java
+│       └── runner/
+│           └── RunCucumberTest.java       # Runner do Cucumber
+└── resources/
+    ├── features/
+    │   ├── login.feature
+    │   ├── login-invalido.feature
+    │   ├── busca-candidato.feature
+    │   ├── cadastro-candidato.feature
+    │   ├── registro-usuario.feature
+    │   ├── gestao-vagas-selecoes.feature
+    │   └── gestao-diversidade-feedbacks.feature
+    └── schemas/
+        ├── login-success-schema.json
+        ├── error-schema.json
+        ├── candidato-schema.json
+        ├── vaga-schema.json
+        ├── selecao-schema.json
+        ├── funcionario-schema.json
+        └── feedback-schema.json
+```
+
+---
+
+## Validações Implementadas
+
+### 1. Status Code Validation ✅
+- HTTP 200 (OK)
+- HTTP 201 (Created)
+- HTTP 400 (Bad Request)
+- HTTP 404 (Not Found)
+- HTTP 409 (Conflict)
+
+### 2. Body Response Validation ✅
+- Validação de campos obrigatórios
+- Validação de tipos de dados
+- Validação de mensagens de erro
+
+### 3. JSON Schema Contract Testing ✅
+Todos os endpoints retornam respostas validadas contra JSON Schemas:
+- `login-success-schema.json` - Resposta de login bem-sucedido
+- `error-schema.json` - Respostas de erro
+- `candidato-schema.json` - Dados de candidatos
+- `vaga-schema.json` - Dados de vagas
+- `selecao-schema.json` - Dados de seleções
+- `funcionario-schema.json` - Dados de funcionários
+- `feedback-schema.json` - Dados de feedbacks
+
+---
+
+## Pipeline CI/CD
+
+Os testes são executados automaticamente no GitHub Actions a cada push:
+
+1. **Build Stage** - Compila o código
+2. **Test Stage** - Executa todos os testes (BDD + Unitários + Integração)
+3. **Deploy Stage** - Faz deploy em staging e produção
+
+Veja `.github/workflows/maven.yml` para mais detalhes.
+
+---
+
+## Alinhamento com ESG (Environmental, Social, Governance)
+
+### Environmental (Ambiental)
+- ✅ Otimização de código em testes para reduzir consumo computacional
+- ✅ Uso de containers Docker para eficiência de recursos
+
+### Social (Responsabilidade Social)
+- ✅ Testes de inclusão e diversidade no cadastro de candidatos
+- ✅ Captura de informações de etnia e gênero
+- ✅ Testes de acessibilidade de APIs
+- ✅ Rastreabilidade de feedbacks para justiça corporativa
+
+### Governance (Governança)
+- ✅ Testes de compliance e autenticação
+- ✅ Validação de contrato de APIs (JSON Schema)
+- ✅ Rastreabilidade de operações críticas
+- ✅ Pipeline CI/CD automatizado para garantir qualidade
+
+---
+
+
 

@@ -64,4 +64,30 @@ public class CandidatoController {
         service.excluir(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Buscar candidato por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Candidato encontrado"),
+        @ApiResponse(responseCode = "404", description = "Candidato não encontrado")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidatoResponse> buscarPorId(@PathVariable Long id) {
+
+        Candidato c = service.buscarPorId(id);
+
+        CandidatoResponse response = new CandidatoResponse(
+            c.getId(),
+            c.getNome(),
+            c.getEmail(),
+            c.getGenero(),
+            c.getEtnia(),
+            c.getLocalizacao(),
+            c.getExperienciaAnos(),
+            c.getDataRegistro()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }

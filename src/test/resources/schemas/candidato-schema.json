@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "nome": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "genero": {
+      "type": "string"
+    },
+    "etnia": {
+      "type": "string"
+    },
+    "localizacao": {
+      "type": "string"
+    },
+    "experienciaAnos": {
+      "type": "integer"
+    },
+    "dataRegistro": {
+      "type": "string"
+    }
+  },
+  "required": ["id", "nome", "email"],
+  "additionalProperties": false
+}
+

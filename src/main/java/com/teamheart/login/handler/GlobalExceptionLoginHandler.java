@@ -1,9 +1,8 @@
-package com.teamheart.feedback.handler;
+package com.teamheart.login.handler;
 
 import com.teamheart.common.api.ApiErrorResponse;
-import com.teamheart.feedback.exception.FeedbackNaoEncontradoException;
-import com.teamheart.feedback.exception.FuncionarioNaoEncontradoException;
 import com.teamheart.login.exception.EmailJaCadastradoException;
+import com.teamheart.login.exception.UsuarioNaoEncontradoException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +14,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice(basePackages = "com.teamheart.feedback")
-public class GlobalExceptionFeedbackHandler {
+@RestControllerAdvice(basePackages = "com.teamheart.login")
+public class GlobalExceptionLoginHandler {
 
-    @ExceptionHandler(FeedbackNaoEncontradoException.class)
-    public ResponseEntity<ApiErrorResponse> handleFeedbackNotFound(FeedbackNaoEncontradoException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), "Recurso não encontrado", ex.getMessage()));
-    }
-
-    @ExceptionHandler(FuncionarioNaoEncontradoException.class)
-    public ResponseEntity<ApiErrorResponse> handleFuncionarioNaoEncontrado(FuncionarioNaoEncontradoException ex) {
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<ApiErrorResponse> handleUsuarioNaoEncontrado(UsuarioNaoEncontradoException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), "Recurso não encontrado", ex.getMessage()));
     }
@@ -34,6 +27,16 @@ public class GlobalExceptionFeedbackHandler {
     public ResponseEntity<ApiErrorResponse> handleEmailJaCadastrado(EmailJaCadastradoException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(new ApiErrorResponse(HttpStatus.CONFLICT.value(), "Conflito", ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        String message = ex.getMessage() != null && ex.getMessage().contains("Invalid UUID")
+            ? "ID fornecido é inválido (formato UUID incorreto)."
+            : ex.getMessage();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), "Requisição inválida", message));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -57,21 +60,5 @@ public class GlobalExceptionFeedbackHandler {
             new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), "Erro de validação", ex.getMessage())
         );
     }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
-        String message = ex.getMessage() != null && ex.getMessage().contains("Invalid UUID")
-            ? "ID fornecido é inválido (formato UUID incorreto)."
-            : ex.getMessage();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), "Requisição inválida", message));
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Erro interno", "Ocorreu um erro interno no servidor."));
-    }
 }
+
